@@ -18,6 +18,13 @@ def format_number(s):
 def date_corrector(s):
 	return str(s[0:6]+'20'+s[6:8])
 
+def get_data(mydb, sql, name_dict):
+	mycursor = mydb.cursor()
+	mycursor.execute(sql)
+	table_rows = mycursor.fetchall()
+	df = pd.DataFrame(table_rows)
+	df = df.rename(columns=name_dict)
+	return df
 
 def format_dataset(stock):
 	df = pd.read_csv(stock,delimiter=';')
@@ -39,7 +46,7 @@ def get_movement(df,fft_100_close):
 	i += 1
 	return pct_close_mvt
     
-def insert_multiple_into_db(sql,val,index):
+def insert_multiple_into_db(mydb, sql,val,index):
 	i = 0
 	while i < index:
 		try:

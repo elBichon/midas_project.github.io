@@ -52,4 +52,4 @@ if __name__ == "__main__":
 
 	sql = "INSERT INTO raw_stock (date, label, name, high, low, open, close, volume, numberOfTrades) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
 	val = (date_list[i], label_list[i], trade_symbol,  high_list[i], low_list[i], open_list[i], close_list[i], volume_list[i], numberOfTrades_list[i])
-	utils.insert_multiple_into_db(sql,val,date_list)
+	utils.insert_multiple_into_db(mydb, sql,val,date_list)
