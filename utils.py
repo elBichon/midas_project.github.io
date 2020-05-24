@@ -39,6 +39,19 @@ def get_movement(df,fft_100_close):
 	i += 1
 	return pct_close_mvt
     
+def insert_multiple_into_db(sql,val,index):
+	i = 0
+	while i < index:
+		try:
+			mycursor = mydb.cursor()
+			mycursor.execute(sql, val)
+			print(mycursor.rowcount, "record inserted.")
+		except:
+			print('insertion failed')
+			pass
+		i += 1
+	mydb.commit()
+	return "1 record inserted."
 
 def get_technical_indicators(df):																	# Create 7 and 21 days Moving Average
 	df['ma20'] = df['fft_20_close'].rolling(window=20).mean()

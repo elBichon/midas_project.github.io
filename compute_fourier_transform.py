@@ -58,14 +58,5 @@ if __name__ == "__main__":
 	numberOfTrades = df.numberOfTrades.values.tolist()
 
 	sql = "INSERT INTO fourier_processed_stock (date_of_day, label, numberOfTrades, name, volume, fft_20_close, fft_20_open, fft_20_low, fft_20_high, fft_100_close, fft_100_open, fft_100_low, fft_100_high) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-	i = 0
-	while i < len(date_of_day):
-		try:
-			mycursor = mydb.cursor()
-			val = (str(date_of_day[i]), str(hour_min[i]), numberOfTrades[i], str(name[i]), volume[i], fft_20_close[i], fft_20_open[i], fft_20_low[i], fft_20_high[i], fft_100_close[i], fft_100_open[i], fft_100_low[i], fft_100_high[i])
-			mycursor.execute(sql, val)
-			print(mycursor.rowcount, "record inserted.")
-		except:
-			pass
-		i += 1
-	mydb.commit()
+	val = (str(date_of_day[i]), str(hour_min[i]), numberOfTrades[i], str(name[i]), volume[i], fft_20_close[i], fft_20_open[i], fft_20_low[i], fft_20_high[i], fft_100_close[i], fft_100_open[i], fft_100_low[i], fft_100_high[i])
+	utils.insert_multiple_into_db(sql,val,date_of_day)

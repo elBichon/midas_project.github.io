@@ -56,8 +56,6 @@ if __name__ == "__main__":
 	df_dict = {'var_ema':df['var_ema'].values.tolist(), 'var_bollinger':df.var_bollinger.values.tolist(), 'rsi_indicator':rsi_indicator, 'stoch_indicator':stoch_indicator, 'var_stoch': df['var_stoch'].values.tolist(), 'RSI':rsi_list,'ema_indicator':ema_indicator,'bollinger_indicator':bollinger_indicator}
 	df = pd.DataFrame(df_dict)
 	df = df.fillna(-100)
-	print(df.head())
-	print(df.columns)
 
 	var_ema = df.var_ema.values.tolist() 
 	var_bollinger = df.var_bollinger.values.tolist()
@@ -69,14 +67,5 @@ if __name__ == "__main__":
 	bollinger_indicator = df.bollinger_indicator.values.tolist()
 
 	sql = "INSERT INTO processed_stock (date_of_day, label, name, volume, numberOfTrades, var_ema, var_bollinger, var_stoch, rsi_indicator, stoch_indicator, RSI, ema_indicator, bollinger_indicator,fft_20_close,fft_100_close,fft_100_open,fft_100_low,fft_100_high) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s)"
-	i = 0
-	while i < len(date_of_day):
-		try:
-			mycursor = mydb.cursor()
-			val = (date_of_day[i], label[i], name[i], volume[i], numberOfTrades[i], var_ema[i], var_bollinger[i], var_stoch[i], rsi_indicator[i], stoch_indicator[i], RSI[i], ema_indicator[i], bollinger_indicator[i],fft_20_close[i],fft_100_close[i],fft_100_open[i],fft_100_low[i],fft_100_high[i])
-			mycursor.execute(sql, val)
-			print(mycursor.rowcount, "record inserted.")
-		except:
-			pass
-		i += 1
-	mydb.commit()
+	val = (date_of_day[i], label[i], name[i], volume[i], numberOfTrades[i], var_ema[i], var_bollinger[i], var_stoch[i], rsi_indicator[i], stoch_indicator[i], RSI[i], ema_indicator[i], bollinger_indicator[i],fft_20_close[i],fft_100_close[i],fft_100_open[i],fft_100_low[i],fft_100_high[i])
+	utils.insert_multiple_into_db(sql,val,date_of_day)
