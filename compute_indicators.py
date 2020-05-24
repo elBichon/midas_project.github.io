@@ -62,6 +62,7 @@ if __name__ == "__main__":
 	ema_indicator = df.ema_indicator.values.tolist() 
 	bollinger_indicator = df.bollinger_indicator.values.tolist()
 
+	i = 0
 	sql = "INSERT INTO processed_stock (date_of_day, label, name, volume, numberOfTrades, var_ema, var_bollinger, var_stoch, rsi_indicator, stoch_indicator, RSI, ema_indicator, bollinger_indicator,fft_20_close,fft_100_close,fft_100_open,fft_100_low,fft_100_high) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s)"
 	val = (date_of_day[i], label[i], name[i], volume[i], numberOfTrades[i], var_ema[i], var_bollinger[i], var_stoch[i], rsi_indicator[i], stoch_indicator[i], RSI[i], ema_indicator[i], bollinger_indicator[i],fft_20_close[i],fft_100_close[i],fft_100_open[i],fft_100_low[i],fft_100_high[i])
-	utils.insert_multiple_into_db(mydb, sql,val,date_of_day)
+	utils.insert_multiple_into_db(mydb, sql,val,date_of_day,i)
