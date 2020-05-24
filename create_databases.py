@@ -1,11 +1,12 @@
 import mysql.connector
+import db_credentials
 
 #create database
 mydb = mysql.connector.connect(
-    host = "localhost",
-    user = "newuser",
-    passwd = "password"
-)
+  host=db_credentials.host,
+  user=db_credentials.user,
+  passwd=db_credentials.passwd,
+) 
 mycursor = mydb.cursor()
 
 print('creating database for Midas Hand')
@@ -20,10 +21,10 @@ except:
 #  print(x) 
 #connect to database
 mydb = mysql.connector.connect(
-  host="localhost",
-  user="newuser",
-  passwd="password",
-  database="Midas_Hand"
+  host=db_credentials.host,
+  user=db_credentials.user,
+  passwd=db_credentials.passwd,
+  database=db_credentials.database
 ) 
 
 

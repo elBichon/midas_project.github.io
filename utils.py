@@ -18,6 +18,13 @@ def format_number(s):
 def date_corrector(s):
 	return str(s[0:6]+'20'+s[6:8])
 
+def get_data(mydb, sql, name_dict):
+	mycursor = mydb.cursor()
+	mycursor.execute(sql)
+	table_rows = mycursor.fetchall()
+	df = pd.DataFrame(table_rows)
+	df = df.rename(columns=name_dict)
+	return df
 
 def format_dataset(stock):
 	df = pd.read_csv(stock,delimiter=';')
@@ -39,6 +46,18 @@ def get_movement(df,fft_100_close):
 	i += 1
 	return pct_close_mvt
     
+def insert_multiple_into_db(mydb, sql,val,index,i):
+	while i < len(index):
+		try:
+			mycursor = mydb.cursor()
+			mycursor.execute(sql, val)
+			print(mycursor.rowcount, "record inserted.")
+		except:
+			print('insertion failed')
+			pass
+		i += 1
+	mydb.commit()
+	return "1 record inserted."
 
 def get_technical_indicators(df):																	# Create 7 and 21 days Moving Average
 	df['ma20'] = df['fft_20_close'].rolling(window=20).mean()

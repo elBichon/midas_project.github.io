@@ -18,13 +18,10 @@ if __name__ == "__main__":
 	  database=db_credentials.database
 	) 
 
-	mycursor = mydb.cursor()
-	mycursor.execute("SELECT * FROM fourier_processed_stock")
-	table_rows = mycursor.fetchall()
-	print(table_rows)
-	df = pd.DataFrame(table_rows)
-	df = df.rename(columns={0:'index', 1:'date_of_day', 2:'label', 3:'numberOfTrades', 4:'name', 5:'volume', 6:'fft_20_close', 7:'fft_20_open', 8:'fft_20_low', 9:'fft_20_high', 10:'fft_100_close', 11:'fft_100_open', 12:'fft_100_low', 13:'fft_100_high'})
-
+	sql = "SELECT * FROM fourier_processed_stock"
+	name_dict = {0:'index', 1:'date_of_day', 2:'label', 3:'numberOfTrades', 4:'name', 5:'volume', 6:'fft_20_close', 7:'fft_20_open', 8:'fft_20_low', 9:'fft_20_high', 10:'fft_100_close', 11:'fft_100_open', 12:'fft_100_low', 13:'fft_100_high'}
+	df = utils.get_data(mydb, sql, name_dict)
+	
 	date_of_day = df.date_of_day.values.tolist()
 	volume = df.volume.values.tolist()
 	name = df.name.values.tolist()
@@ -37,7 +34,6 @@ if __name__ == "__main__":
 	fft_100_low = df.fft_100_low.values.tolist()
 	fft_100_open = df.fft_100_open.values.tolist()
 	fft_100_high = df.fft_100_high.values.tolist()
-
 
 	stoch_indicator = utils.stoch_indicator(df['%K'].values.tolist(),df['%D'].values.tolist())
 	bollinger_indicator = utils.bollinger_indicator(df['upper_band'].values.tolist(),df['lower_band'].values.tolist(),fft_20_close)
@@ -56,8 +52,6 @@ if __name__ == "__main__":
 	df_dict = {'var_ema':df['var_ema'].values.tolist(), 'var_bollinger':df.var_bollinger.values.tolist(), 'rsi_indicator':rsi_indicator, 'stoch_indicator':stoch_indicator, 'var_stoch': df['var_stoch'].values.tolist(), 'RSI':rsi_list,'ema_indicator':ema_indicator,'bollinger_indicator':bollinger_indicator}
 	df = pd.DataFrame(df_dict)
 	df = df.fillna(-100)
-	print(df.head())
-	print(df.columns)
 
 	var_ema = df.var_ema.values.tolist() 
 	var_bollinger = df.var_bollinger.values.tolist()
@@ -68,15 +62,7 @@ if __name__ == "__main__":
 	ema_indicator = df.ema_indicator.values.tolist() 
 	bollinger_indicator = df.bollinger_indicator.values.tolist()
 
-	sql = "INSERT INTO processed_stock (date_of_day, label, name, volume, numberOfTrades, var_ema, var_bollinger, var_stoch, rsi_indicator, stoch_indicator, RSI, ema_indicator, bollinger_indicator,fft_20_close,fft_100_close,fft_100_open,fft_100_low,fft_100_high) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s)"
 	i = 0
-	while i < len(date_of_day):
-		try:
-			mycursor = mydb.cursor()
-			val = (date_of_day[i], label[i], name[i], volume[i], numberOfTrades[i], var_ema[i], var_bollinger[i], var_stoch[i], rsi_indicator[i], stoch_indicator[i], RSI[i], ema_indicator[i], bollinger_indicator[i],fft_20_close[i],fft_100_close[i],fft_100_open[i],fft_100_low[i],fft_100_high[i])
-			mycursor.execute(sql, val)
-			print(mycursor.rowcount, "record inserted.")
-		except:
-			pass
-		i += 1
-	mydb.commit()
+	sql = "INSERT INTO processed_stock (date_of_day, label, name, volume, numberOfTrades, var_ema, var_bollinger, var_stoch, rsi_indicator, stoch_indicator, RSI, ema_indicator, bollinger_indicator,fft_20_close,fft_100_close,fft_100_open,fft_100_low,fft_100_high) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s)"
+	val = (date_of_day[i], label[i], name[i], volume[i], numberOfTrades[i], var_ema[i], var_bollinger[i], var_stoch[i], rsi_indicator[i], stoch_indicator[i], RSI[i], ema_indicator[i], bollinger_indicator[i],fft_20_close[i],fft_100_close[i],fft_100_open[i],fft_100_low[i],fft_100_high[i])
+	utils.insert_multiple_into_db(mydb, sql,val,date_of_day,i)

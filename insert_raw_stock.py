@@ -49,20 +49,7 @@ if __name__ == "__main__":
 	numberOfTrades_list = df.numberOfTrades.values.tolist()
 
 	print('inserting data for: ', trade_symbol)
-
-	sql = "INSERT INTO raw_stock (date, label, name, high, low, open, close, volume, numberOfTrades) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-
 	i = 0
-	while i < len(date_list):
-		try:
-			mycursor = mydb.cursor()
-			val = (date_list[i], label_list[i], trade_symbol,  high_list[i], low_list[i], open_list[i], close_list[i], volume_list[i], numberOfTrades_list[i])
-			mycursor.execute(sql, val)
-			print(mycursor.rowcount, "record inserted.")
-		except:
-			print('insertion failed')
-			pass
-		i += 1
-
-	mydb.commit()
-	print('insertion done')
+	sql = "INSERT INTO raw_stock (date, label, name, high, low, open, close, volume, numberOfTrades) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+	val = (date_list[i], label_list[i], trade_symbol,  high_list[i], low_list[i], open_list[i], close_list[i], volume_list[i], numberOfTrades_list[i])
+	utils.insert_multiple_into_db(mydb, sql,val,date_list,i)
