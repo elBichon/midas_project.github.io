@@ -1,4 +1,5 @@
 import mysql.connector
+import db_credentials
 
 #create database
 mydb = mysql.connector.connect(
