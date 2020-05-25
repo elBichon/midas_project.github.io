@@ -49,7 +49,10 @@ if __name__ == "__main__":
 	numberOfTrades_list = df.numberOfTrades.values.tolist()
 
 	print('inserting data for: ', trade_symbol)
-	i = 0
 	sql = "INSERT INTO raw_stock (date, label, name, high, low, open, close, volume, numberOfTrades) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-	val = (date_list[i], label_list[i], trade_symbol,  high_list[i], low_list[i], open_list[i], close_list[i], volume_list[i], numberOfTrades_list[i])
-	utils.insert_multiple_into_db(mydb, sql,val,date_list,i)
+	i = 0
+	while i < len(date_list):
+		print(str(i)+'/'+str(len(date_list)))
+		val = (date_list[i], label_list[i], trade_symbol,  high_list[i], low_list[i], open_list[i], close_list[i], volume_list[i], numberOfTrades_list[i])
+		utils.insert_multiple_into_db(mydb, sql,val)
+		i += 1 

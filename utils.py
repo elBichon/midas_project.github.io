@@ -46,16 +46,14 @@ def get_movement(df,fft_100_close):
 	i += 1
 	return pct_close_mvt
     
-def insert_multiple_into_db(mydb, sql,val,index,i):
-	while i < len(index):
-		try:
-			mycursor = mydb.cursor()
-			mycursor.execute(sql, val)
-			print(mycursor.rowcount, "record inserted.")
-		except:
-			print('insertion failed')
-			pass
-		i += 1
+def insert_multiple_into_db(mydb, sql,val):
+	try:
+		mycursor = mydb.cursor()
+		mycursor.execute(sql, val)
+		print(mycursor.rowcount, "record inserted.")
+	except:
+		print('insertion failed')
+		pass
 	mydb.commit()
 	return "1 record inserted."
 
