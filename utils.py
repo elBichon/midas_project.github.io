@@ -153,7 +153,33 @@ def generate_momentum(fft,momentum):
 	i += 1
 	return(momentum)
 
+def get_index(sql,index_list):
+	mycursor = mydb.cursor()
+	mycursor.execute(sql)
+	table_rows = mycursor.fetchall()
+	try:
+		index_list.append(table_rows[0][0])
+	except:
+		pass
 
+def extract_data(sql):
+	mycursor = mydb.cursor()
+	mycursor.execute(sql)
+	table_rows = mycursor.fetchall()
+	return table_rows
+
+def labelling_data(label):
+	i = 0
+	while i < len(label):
+		if i in min_index_list:
+			label[i] = -1
+		elif i in max_index_list:
+			label[i] = 1
+		else:
+			label[i] = 0
+		i += 1
+	return label
+	
 #Create a function to process the data into 7 day look back slices
 #def processData(data,lb):
 #    X,Y = [],[]
