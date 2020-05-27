@@ -153,7 +153,7 @@ def generate_momentum(fft,momentum):
 	i += 1
 	return(momentum)
 
-def get_index(sql,index_list):
+def get_index(sql,index_list,mydb):
 	mycursor = mydb.cursor()
 	mycursor.execute(sql)
 	table_rows = mycursor.fetchall()
@@ -162,18 +162,18 @@ def get_index(sql,index_list):
 	except:
 		pass
 
-def extract_data(sql):
+def extract_data(sql,mydb):
 	mycursor = mydb.cursor()
 	mycursor.execute(sql)
 	table_rows = mycursor.fetchall()
 	return table_rows
 
-def labelling_data(label):
+def labelling_data(label,min_list,max_list):
 	i = 0
 	while i < len(label):
-		if i in min_index_list:
+		if i in min_list:
 			label[i] = -1
-		elif i in max_index_list:
+		elif i in max_list:
 			label[i] = 1
 		else:
 			label[i] = 0

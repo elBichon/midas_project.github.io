@@ -26,13 +26,14 @@ if __name__ == "__main__":
 
 
 	sql = "SELECT * FROM fourier_processed_stock"
-	name_dict = {0:'index', 1:'date_of_day', 2:'label', 3:'numberOfTrades', 4:'name', 5:'volume', 6:'fft_20_close', 7:'fft_20_open', 8:'fft_20_low', 9:'fft_20_high', 10:'fft_100_close', 11:'fft_100_open', 12:'fft_100_low', 13:'fft_100_high'}
+	name_dict = {0:'index', 1:'date_of_day', 2:'hour', 3:'numberOfTrades', 4:'name', 5:'volume', 6:'fft_20_close', 7:'fft_20_open', 8:'fft_20_low', 9:'fft_20_high', 10:'fft_100_close', 11:'fft_100_open', 12:'fft_100_low', 13:'fft_100_high'}
 	df = utils.get_data(mydb, sql, name_dict)
 	
+	index = df.index.values.tolist()
 	date_of_day = df.date_of_day.values.tolist()
 	volume = df.volume.values.tolist()
 	name = df.name.values.tolist()
-	label = df.label.values.tolist()
+	hour = df.hour.values.tolist()
 	numberOfTrades = df.numberOfTrades.values.tolist()
 
 	df = utils.get_technical_indicators(df)
@@ -69,10 +70,19 @@ if __name__ == "__main__":
 	ema_indicator = df.ema_indicator.values.tolist() 
 	bollinger_indicator = df.bollinger_indicator.values.tolist()
 
-	sql = "INSERT INTO processed_stock (date_of_day, label, name, volume, numberOfTrades, var_ema, var_bollinger, var_stoch, rsi_indicator, stoch_indicator, RSI, ema_indicator, bollinger_indicator,fft_20_close,fft_100_close,fft_100_open,fft_100_low,fft_100_high) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s)"
+	sql = "INSERT INTO processed_stock (date_of_day, hour, name, volume, numberOfTrades, var_ema, var_bollinger, var_stoch, rsi_indicator, stoch_indicator, RSI, ema_indicator, bollinger_indicator,fft_20_close,fft_100_close,fft_100_open,fft_100_low,fft_100_high) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s)"
 	i = 0
-	while i < len(date_of_day):
-		print(str(i)+'/'+str(len(date_of_day)))
-		val = (date_of_day[i], label[i], name[i], volume[i], numberOfTrades[i], var_ema[i], var_bollinger[i], var_stoch[i], rsi_indicator[i], stoch_indicator[i], RSI[i], ema_indicator[i], bollinger_indicator[i],fft_20_close[i],fft_100_close[i],fft_100_open[i],fft_100_low[i],fft_100_high[i])
+	while i < len(index):
+		print(str(i)+'/'+str(len(index)))
+		val = (date_of_day[i], hour[i], name[i], volume[i], numberOfTrades[i], var_ema[i], var_bollinger[i], var_stoch[i], rsi_indicator[i], stoch_indicator[i], RSI[i], ema_indicator[i], bollinger_indicator[i],fft_20_close[i],fft_100_close[i],fft_100_open[i],fft_100_low[i],fft_100_high[i])
+		utils.insert_multiple_into_db(mydb, sql,val)
+		i += 1
+
+
+	sql = "INSERT INTO master_record (date_of_day, hour, name, volume, numberOfTrades, var_ema, var_bollinger, var_stoch, rsi_indicator, stoch_indicator, RSI, ema_indicator, bollinger_indicator,fft_20_close,fft_100_close,fft_100_open,fft_100_low,fft_100_high) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s)"
+	i = 0
+	while i < len(index):
+		print(str(i)+'/'+str(index))
+		val = (date_of_day[i], hour[i], name[i], volume[i], numberOfTrades[i], var_ema[i], var_bollinger[i], var_stoch[i], rsi_indicator[i], stoch_indicator[i], RSI[i], ema_indicator[i], bollinger_indicator[i],fft_20_close[i],fft_100_close[i],fft_100_open[i],fft_100_low[i],fft_100_high[i])
 		utils.insert_multiple_into_db(mydb, sql,val)
 		i += 1
