@@ -1,0 +1,8 @@
+mysql-connector-python==8.0.20
+numpy==1.17.0
+pandas==0.18.1
+plotly==4.6.0
+TA-Lib==0.4.18
+urllib3==1.22
+virtualenv==20.0.20
+
