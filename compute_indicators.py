@@ -18,12 +18,6 @@ if __name__ == "__main__":
 	  database=db_credentials.database
 	) 
 
-	sql_get_min_max = "SELECT DISTINCT name FROM fourier_processed_stock"
-	mycursor = mydb.cursor()
-	mycursor.execute(sql_get_min_max)
-	table_rows = mycursor.fetchall()
-	print(table_rows)
-
 
 	sql = "SELECT * FROM fourier_processed_stock"
 	name_dict = {0:'index', 1:'date_of_day', 2:'hour', 3:'numberOfTrades', 4:'name', 5:'volume', 6:'fft_20_close', 7:'fft_20_open', 8:'fft_20_low', 9:'fft_20_high', 10:'fft_100_close', 11:'fft_100_open', 12:'fft_100_low', 13:'fft_100_high'}
@@ -74,15 +68,6 @@ if __name__ == "__main__":
 	i = 0
 	while i < len(index):
 		print(str(i)+'/'+str(len(index)))
-		val = (date_of_day[i], hour[i], name[i], volume[i], numberOfTrades[i], var_ema[i], var_bollinger[i], var_stoch[i], rsi_indicator[i], stoch_indicator[i], RSI[i], ema_indicator[i], bollinger_indicator[i],fft_20_close[i],fft_100_close[i],fft_100_open[i],fft_100_low[i],fft_100_high[i])
-		utils.insert_multiple_into_db(mydb, sql,val)
-		i += 1
-
-
-	sql = "INSERT INTO master_record (date_of_day, hour, name, volume, numberOfTrades, var_ema, var_bollinger, var_stoch, rsi_indicator, stoch_indicator, RSI, ema_indicator, bollinger_indicator,fft_20_close,fft_100_close,fft_100_open,fft_100_low,fft_100_high) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s)"
-	i = 0
-	while i < len(index):
-		print(str(i)+'/'+str(index))
 		val = (date_of_day[i], hour[i], name[i], volume[i], numberOfTrades[i], var_ema[i], var_bollinger[i], var_stoch[i], rsi_indicator[i], stoch_indicator[i], RSI[i], ema_indicator[i], bollinger_indicator[i],fft_20_close[i],fft_100_close[i],fft_100_open[i],fft_100_low[i],fft_100_high[i])
 		utils.insert_multiple_into_db(mydb, sql,val)
 		i += 1
