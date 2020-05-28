@@ -29,8 +29,7 @@ if __name__ == "__main__":
 	trade_symbol  = args.symbol
 	df = get_historical_intraday(trade_symbol, output_format='pandas',token= credentials.token)
 	df = df.fillna(method='ffill')
-	print(df.columns)
-	print(df.tail())
+
 
 	mydb = mysql.connector.connect(
 	  host=db_credentials.host,
