@@ -18,22 +18,21 @@ if __name__ == "__main__":
 	  database=db_credentials.database
 	) 
 
-	sql = "SELECT name, MIN(fft_100_close) FROM unlabelled_record GROUP BY name"
+	sql = "SELECT id, name, fft_100_close FROM unlabelled_record a WHERE fft_100_close = (SELECT MIN(fft_100_close) FROM unlabelled_record b WHERE b.name = a.name)"
 	table_rows = utils.extract_data(sql,mydb)
+	print(table_rows)
 	min_index_list = []
 	i = 0
 	while i < len(table_rows):
-		sql = "SELECT id FROM unlabelled_record WHERE name = '"+str(table_rows[i][0])+"' AND fft_100_close LIKE "+str(table_rows[i][1]).replace('.0','')
-		utils.get_index(sql,min_index_list,mydb)
+		min_index_list.append(table_rows[i][0])
 		i += 1
 
-	sql = "SELECT name, MAX(fft_100_close) FROM unlabelled_record GROUP BY name"
+	sql = "SELECT id, name, fft_100_close FROM unlabelled_record a WHERE fft_100_close = (SELECT MAX(fft_100_close) FROM unlabelled_record b WHERE b.name = a.name)"
 	table_rows = utils.extract_data(sql,mydb)
 	max_index_list = []
 	i = 0
 	while i < len(table_rows):
-		sql = "SELECT id FROM unlabelled_record WHERE name = '"+str(table_rows[i][0])+"' AND fft_100_close LIKE "+str(table_rows[i][1]).replace('.0','')
-		utils.get_index(sql,max_index_list,mydb)
+		max_index_list.append(table_rows[i][0])
 		i += 1
 
 	sql = "SELECT * FROM unlabelled_record"
