@@ -7,8 +7,7 @@ import itertools
 import matplotlib.pyplot as plt
 import math
 from mpl_finance import candlestick_ohlc
-
-# to not display the warnings of tensorflow
+from sklearn.preprocessing import LabelEncoder
 import os
 
 def format_number(s):
@@ -17,6 +16,21 @@ def format_number(s):
 
 def date_corrector(s):
 	return str(s[0:6]+'20'+s[6:8])
+
+def preprocess(df):
+    for i in df.columns:
+        if df[i].dtype == 'object':
+            df[i] = df[i].fillna(df[i].mode().iloc[0])
+        elif (df[i].dtype == 'int' or df[i].dtype == 'float'):
+            df[i] = df[i].fillna(np.nanmedian(df[i]))
+
+    enc = LabelEncoder()
+    for i in df.columns:
+        if (df[i].dtype == 'object'):
+            df[i] = enc.fit_transform(df[i].astype('str'))
+            df[i] = df[i].astype('object')
+
+
 
 def get_data(mydb, sql, name_dict):
 	mycursor = mydb.cursor()
@@ -47,13 +61,13 @@ def get_movement(df,fft_100_close):
 	return pct_close_mvt
     
 def insert_multiple_into_db(mydb, sql,val):
-	try:
-		mycursor = mydb.cursor()
-		mycursor.execute(sql, val)
-		print(mycursor.rowcount, "record inserted.")
-	except:
-		print('insertion failed')
-		pass
+	#try:
+	mycursor = mydb.cursor()
+	mycursor.execute(sql, val)
+	print(mycursor.rowcount, "record inserted.")
+	#except:
+	#	print('insertion failed')
+	#	pass
 	mydb.commit()
 	return "1 record inserted."
 
@@ -162,7 +176,7 @@ def get_index(sql,index_list,mydb):
 	except:
 		pass
 
-def extract_data(sql,mydb):
+def execute_query(sql,mydb):
 	mycursor = mydb.cursor()
 	mycursor.execute(sql)
 	table_rows = mycursor.fetchall()

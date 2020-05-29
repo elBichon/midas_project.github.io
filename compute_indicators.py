@@ -50,11 +50,15 @@ if __name__ == "__main__":
 	bollinger = df.bollinger_indicator.values.tolist()
 	ema_12 = df['12ema'].values.tolist()
 	ema_26 = df['26ema'].values.tolist()
+	upper_list = df['upper_band'].values.tolist()
+	lower_list = df['lower_band'].values.tolist()
+	K_value = df['%K'].values.tolist()
+	D_value = df['%D'].values.tolist()
+
 	index = df.index.values.tolist()
-	df_dict = {'var_ema':df['var_ema'].values.tolist(), 'var_bollinger':df.var_bollinger.values.tolist(), 'rsi_indicator':rsi_indicator, 'stoch_indicator':stoch_indicator, 'var_stoch': df['var_stoch'].values.tolist(), 'RSI':rsi_list,'ema_indicator':ema_indicator,'bollinger_indicator':bollinger_indicator}
+	df_dict = {'var_ema':df['var_ema'].values.tolist(), 'var_bollinger':df.var_bollinger.values.tolist(), 'rsi_indicator':rsi_indicator, 'stoch_indicator':stoch_indicator, 'var_stoch': df['var_stoch'].values.tolist(), 'RSI':rsi_list,'ema_indicator':ema_indicator,'bollinger_indicator':bollinger_indicator,'fft_20_close': fft_20_close,'fft_100_close': fft_100_close,'fft_100_open': fft_100_open,'fft_100_low': fft_100_low,'fft_100_high':fft_100_high , 'ema_12': ema_12,'ema_26': ema_26,'upper_list': upper_list,'lower_list':lower_list , 'K_value': K_value, 'D_value':D_value}
 	df = pd.DataFrame(df_dict)
 	df = df.fillna(-100)
-
 	var_ema = df.var_ema.values.tolist() 
 	var_bollinger = df.var_bollinger.values.tolist()
 	var_stoch = df.var_stoch.values.tolist() 
@@ -63,11 +67,17 @@ if __name__ == "__main__":
 	RSI = df.RSI.values.tolist()
 	ema_indicator = df.ema_indicator.values.tolist() 
 	bollinger_indicator = df.bollinger_indicator.values.tolist()
+	ema_12 = df['ema_12'].values.tolist()
+	ema_26 = df['ema_26'].values.tolist()
+	upper_list = df['upper_list'].values.tolist()
+	lower_list = df['lower_list'].values.tolist()
+	K_value = df['K_value'].values.tolist()
+	D_value = df['D_value'].values.tolist()
 
-	sql = "INSERT INTO processed_stock (date_of_day, hour, name, volume, numberOfTrades, var_ema, var_bollinger, var_stoch, rsi_indicator, stoch_indicator, RSI, ema_indicator, bollinger_indicator,fft_20_close,fft_100_close,fft_100_open,fft_100_low,fft_100_high) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s)"
+	sql = "INSERT INTO processed_stock (date_of_day, hour, name, volume, numberOfTrades, var_ema, var_bollinger, var_stoch, rsi_indicator, stoch_indicator, RSI, ema_indicator, bollinger_indicator,fft_20_close,fft_100_close,fft_100_open,fft_100_low,fft_100_high, ema_12, ema_26, upper_list, lower_list, K_value, D_value) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 	i = 0
 	while i < len(index):
 		print(str(i)+'/'+str(len(index)))
-		val = (date_of_day[i], hour[i], name[i], volume[i], numberOfTrades[i], var_ema[i], var_bollinger[i], var_stoch[i], rsi_indicator[i], stoch_indicator[i], RSI[i], ema_indicator[i], bollinger_indicator[i],fft_20_close[i],fft_100_close[i],fft_100_open[i],fft_100_low[i],fft_100_high[i])
+		val = (date_of_day[i], hour[i], name[i], volume[i], numberOfTrades[i], var_ema[i], var_bollinger[i], var_stoch[i], rsi_indicator[i], stoch_indicator[i], RSI[i], ema_indicator[i], bollinger_indicator[i],fft_20_close[i],fft_100_close[i],fft_100_open[i],fft_100_low[i],fft_100_high[i], ema_12[i], ema_26[i], upper_list[i], lower_list[i], K_value[i], D_value[i])
 		utils.insert_multiple_into_db(mydb, sql,val)
 		i += 1
