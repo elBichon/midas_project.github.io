@@ -139,4 +139,5 @@ if __name__ == "__main__":
 		utils.insert_multiple_into_db(mydb, sql,val)
 		i += 1
 
-	
+	sql = "DELETE * FROM 
+	utils.execute_query(sql,mydb)
