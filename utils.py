@@ -177,10 +177,17 @@ def get_index(sql,index_list,mydb):
 		pass
 
 def execute_query(sql,mydb):
+	try:
+		mycursor = mydb.cursor()
+		mycursor.execute(sql)
+		table_rows = mycursor.fetchall()
+	except:
+		print('query failed')
+	return table_rows
+
+def delete_query(sql,mydb):
 	mycursor = mydb.cursor()
 	mycursor.execute(sql)
-	table_rows = mycursor.fetchall()
-	return table_rows
 
 def labelling_data(label,min_list,max_list):
 	i = 0
