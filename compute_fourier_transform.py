@@ -57,7 +57,6 @@ if __name__ == "__main__":
 	df['fft_100_low'] = fft_100_low
 	df['fft_100_open'] = fft_100_open
 
-	
 	df = df[['date_of_day', 'hour', 'numberOfTrades', 'name', 'volume', 'fft_20_close', 'fft_20_open', 'fft_20_low', 'fft_20_high', 'fft_100_close', 'fft_100_open', 'fft_100_low', 'fft_100_high']]
 	val = [tuple(x) for x in df.values]
 	sql = "INSERT INTO fourier_processed_stock (date_of_day, hour, numberOfTrades, name, volume, fft_20_close, fft_20_open, fft_20_low, fft_20_high, fft_100_close, fft_100_open, fft_100_low, fft_100_high) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"

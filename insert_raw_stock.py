@@ -40,10 +40,8 @@ if __name__ == "__main__":
 
 	name = [str(trade_symbol) for i in range(len(df.date.values.tolist()))]
 	df['name'] = name
-	print(df.head())
 	df = df[['date', 'label', 'name', 'high', 'low', 'open', 'close', 'volume', 'numberOfTrades']]
 	val = [tuple(x) for x in df.values]
-	print(val)
 
 	sql = "INSERT INTO raw_stock (date, hour, name, high, low, open, close, volume, numberOfTrades) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
 	mycursor = mydb.cursor()

@@ -60,7 +60,6 @@ if __name__ == "__main__":
 	df_dict = {'var_ema':df['var_ema'].values.tolist(), 'var_bollinger':df.var_bollinger.values.tolist(), 'rsi_indicator':rsi_indicator, 'stoch_indicator':stoch_indicator, 'var_stoch': df['var_stoch'].values.tolist(), 'RSI':rsi_list,'ema_indicator':ema_indicator,'bollinger_indicator':bollinger_indicator,'fft_20_close': fft_20_close,'fft_100_close': fft_100_close,'fft_100_open': fft_100_open,'fft_100_low': fft_100_low,'fft_100_high':fft_100_high , 'ema_12': ema_12,'ema_26': ema_26,'upper_list': upper_list,'lower_list':lower_list , 'K_value': K_value, 'D_value':D_value, 'date_of_day':date_of_day,'hour':hour, 'name':name, 'volume':volume, 'numberOfTrades':numberOfTrades}
 	df = pd.DataFrame(df_dict)
 	df = df.fillna(-100)
-	print(df.columns)
 
 	sql = "INSERT INTO processed_stock (date_of_day, hour, name, volume, numberOfTrades, var_ema, var_bollinger, var_stoch, rsi_indicator, stoch_indicator, RSI, ema_indicator, bollinger_indicator,fft_20_close,fft_100_close,fft_100_open,fft_100_low,fft_100_high, ema_12, ema_26, upper_list, lower_list, K_value, D_value) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 	df = df[['date_of_day', 'hour', 'name', 'volume', 'numberOfTrades', 'var_ema', 'var_bollinger', 'var_stoch', 'rsi_indicator', 'stoch_indicator', 'RSI', 'ema_indicator', 'bollinger_indicator', 'fft_20_close', 'fft_100_close', 'fft_100_open', 'fft_100_low', 'fft_100_high', 'ema_12', 'ema_26', 'upper_list', 'lower_list', 'K_value', 'D_value']]
