@@ -37,7 +37,6 @@ if __name__ == "__main__":
 	df_fft_low = utils.fourier_transform(df,'low',fft_20_low,fft_100_low)
 	df_fft_open = utils.fourier_transform(df,'open',fft_20_open,fft_100_open)
 	df_fft_open = utils.fourier_transform(df,'high',fft_20_high,fft_100_high)
-	volume = df['volume'].values.tolist()
 
 	fft_20_close = list(itertools.chain.from_iterable(fft_20_close))
 	fft_20_high = list(itertools.chain.from_iterable(fft_20_high))
@@ -47,17 +46,21 @@ if __name__ == "__main__":
 	fft_100_high = list(itertools.chain.from_iterable(fft_100_high))
 	fft_100_low = list(itertools.chain.from_iterable(fft_100_low))
 	fft_100_open = list(itertools.chain.from_iterable(fft_100_open))
-	date_of_day = df.date_of_day.values.tolist() 
-	hour = df.hour.values.tolist()
-	name = df.name.values.tolist()
-	volume = df.volume.values.tolist()
-	numberOfTrades = df.numberOfTrades.values.tolist()
 
-	
+
+	df['fft_20_close'] = fft_20_close
+	df['fft_20_high'] = fft_20_high
+	df['fft_20_low'] = fft_20_low
+	df['fft_20_open'] = fft_20_open
+	df['fft_100_close'] = fft_100_close
+	df['fft_100_high'] = fft_100_high
+	df['fft_100_low'] = fft_100_low
+	df['fft_100_open'] = fft_100_open
+
+	df = df[['date_of_day', 'hour', 'numberOfTrades', 'name', 'volume', 'fft_20_close', 'fft_20_open', 'fft_20_low', 'fft_20_high', 'fft_100_close', 'fft_100_open', 'fft_100_low', 'fft_100_high']]
+	val = [tuple(x) for x in df.values]
 	sql = "INSERT INTO fourier_processed_stock (date_of_day, hour, numberOfTrades, name, volume, fft_20_close, fft_20_open, fft_20_low, fft_20_high, fft_100_close, fft_100_open, fft_100_low, fft_100_high) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-	i = 0
-	while i < len(index):
-		print(str(i)+'/'+str(len(index)))
-		val = (str(date_of_day[i]), str(hour[i]), numberOfTrades[i], str(name[i]), volume[i], fft_20_close[i], fft_20_open[i], fft_20_low[i], fft_20_high[i], fft_100_close[i], fft_100_open[i], fft_100_low[i], fft_100_high[i])
-		utils.insert_multiple_into_db(mydb, sql,val)
-		i += 1
+	mycursor = mydb.cursor()
+	mycursor.executemany(sql, val)
+	mydb.commit()
+	print(mycursor.rowcount, "was inserted.") 
