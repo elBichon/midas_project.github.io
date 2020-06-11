@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+# coding: utf-8
 from datetime import datetime
 from iexfinance.stocks import get_historical_intraday
 from iexfinance.stocks import Stock
@@ -18,6 +20,7 @@ import db_credentials
 plt.style.use('ggplot')
 
 
+
 def main():
     pass
 
@@ -27,25 +30,27 @@ if __name__ == "__main__":
 	parser.add_argument('symbol', type=str, help='')
 	args = parser.parse_args()
 	trade_symbol  = args.symbol
-	df = get_historical_intraday(trade_symbol, output_format='pandas',token= credentials.token)
-	df = df.fillna(method='ffill')
+	if len(trade_symbol) != 0 and isinstance(trade_symbol, str) == True:
+		try:
+			df = get_historical_intraday(trade_symbol.upper(), output_format='pandas',token= credentials.token)
+			df = df.fillna(method='ffill')
+		except:
+			pass
 
+		MYDB = mysql.connector.connect(
+		  host=db_credentials.host,
+		  user=db_credentials.user,
+		  passwd=db_credentials.passwd,
+		  database=db_credentials.database
+		) 
 
-	mydb = mysql.connector.connect(
-	  host=db_credentials.host,
-	  user=db_credentials.user,
-	  passwd=db_credentials.passwd,
-	  database=db_credentials.database
-	) 
+		name = [str(trade_symbol) for i in range(len(df.date.values.tolist()))]
+		df['name'] = name
+		df = df[['date', 'label', 'name', 'high', 'low', 'open', 'close', 'volume', 'numberOfTrades']]
+		VAL = [tuple(x) for x in df.values]
+		SQL = "INSERT INTO raw_stock (date, hour, name, high, low, open, close, volume, numberOfTrades) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+		utils.insert_data(MYDB,SQL,VAL)
 
-	name = [str(trade_symbol) for i in range(len(df.date.values.tolist()))]
-	df['name'] = name
-	df = df[['date', 'label', 'name', 'high', 'low', 'open', 'close', 'volume', 'numberOfTrades']]
-	val = [tuple(x) for x in df.values]
-
-	sql = "INSERT INTO raw_stock (date, hour, name, high, low, open, close, volume, numberOfTrades) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-	mycursor = mydb.cursor()
-	mycursor.executemany(sql, val)
-	mydb.commit()
-	print(mycursor.rowcount, "was inserted.") 
+	else:
+		pass
 
