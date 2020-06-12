@@ -31,6 +31,8 @@ if __name__ == "__main__":
 	y2 = []
 	x3 = []
 	y3 = []
+	x4 = []
+	y4 = []
 	while True:
 		df = get_historical_intraday(trade_symbol, output_format='pandas',token= credentials.token)
 		df = df.fillna(method='ffill')
@@ -90,9 +92,10 @@ if __name__ == "__main__":
 		ema_26 = df['26ema'].values.tolist()
 		index = df.index.values.tolist()
 
-		utils.ema_trade_indicator(ema_12,ema_26,index,fft_20_close,x2,y2)
-		utils.rsi_stoch_trade_indicator(index,rsi,stoch,fft_20_close,x1,y1)
-		utils.bollinger_trade_indicator(bollinger,index,fft_20_close,x3,y3)
+		utils.rsi_trade_indicator(index,rsi,fft_20_close,x1,y1)
+		utils.stoch_trade_indicator(index,stoch,fft_20_close,x2,y2)
+		utils.ema_trade_indicator(ema_12,ema_26,index,fft_20_close,x3,y3)
+		utils.bollinger_trade_indicator(bollinger,index,fft_20_close,x4,y4)
 
 		i = 0
 		name = []
@@ -104,5 +107,5 @@ if __name__ == "__main__":
 		df = pd.DataFrame(df_dict)
 
 		print(df.tail())
-		utils.generate_graph(df,x1,y1,x2,y2,x3,y3)
+		utils.generate_graph(df,x1,y1,x2,y2,x3,y3,x4,y4)
 		time.sleep(60)

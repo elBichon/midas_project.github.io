@@ -11,35 +11,35 @@ def main():
 
 if __name__ == "__main__":
 
-	mydb = mysql.connector.connect(
+	MYDB = mysql.connector.connect(
 	  host=db_credentials.host,
 	  user=db_credentials.user,
 	  passwd=db_credentials.passwd,
 	  database=db_credentials.database
 	) 
 
-	sql = "SELECT name, MIN(fft_100_close) FROM unlabelled_record GROUP BY name"
-	table_rows = utils.extract_data(sql,mydb)
+	SQL = "SELECT name, MIN(fft_100_close) FROM unlabelled_record GROUP BY name"
+	table_rows = utils.extract_data(sql,MYDB)
 	min_index_list = []
 	i = 0
 	while i < len(table_rows):
-		sql = "SELECT id FROM unlabelled_record WHERE name = '"+str(table_rows[i][0])+"' AND fft_100_close LIKE "+str(table_rows[i][1]).replace('.0','')
-		utils.get_index(sql,min_index_list,mydb)
+		SQL = "SELECT id FROM unlabelled_record WHERE name = '"+str(table_rows[i][0])+"' AND fft_100_close LIKE "+str(table_rows[i][1]).replace('.0','')
+		utils.get_index(SQL,min_index_list,MYDB)
 		i += 1
 
 	sql = "SELECT name, MAX(fft_100_close) FROM unlabelled_record GROUP BY name"
-	table_rows = utils.extract_data(sql,mydb)
+	table_rows = utils.extract_data(sql,MYDB)
 	max_index_list = []
 	i = 0
 	while i < len(table_rows):
-		sql = "SELECT id FROM unlabelled_record WHERE name = '"+str(table_rows[i][0])+"' AND fft_100_close LIKE "+str(table_rows[i][1]).replace('.0','')
-		utils.get_index(sql,max_index_list,mydb)
+		SQL = "SELECT id FROM unlabelled_record WHERE name = '"+str(table_rows[i][0])+"' AND fft_100_close LIKE "+str(table_rows[i][1]).replace('.0','')
+		utils.get_index(SQL,max_index_list,MYDB)
 		i += 1
 
-	sql = "SELECT * FROM unlabelled_record"
-	table_rows = utils.extract_data(sql,mydb)
-	name_dict={0:"index", 1:"date_of_day" , 2:"hour" , 3:"name" , 4:"volume" , 5:"numberOfTrades" , 6:"var_ema" , 7:"var_bollinger" , 8:"var_stoch" , 9:"rsi_indicator" , 10:"stoch_indicator" , 11:"RSI" , 12:"ema_indicator" , 13:"bollinger_indicator" , 14:"fft_20_close" , 15:"fft_100_close" , 16:"fft_100_open" , 17:"fft_100_low" , 18:"fft_100_high", 19:"CDL2CROWS" , 20:"CDL3BLACKCROWS" , 21:"CDL3INSIDE" , 22:"CDL3LINESTRIKE" , 23:"CDL3OUTSIDE" , 24:"CDL3STARSINSOUTH" , 25:"CDL3WHITESOLDIERS" , 26:"CDLABANDONEDBABY" , 27:"CDLADVANCEBLOCK" , 28:"CDLBELTHOLD" , 29:"CDLBREAKAWAY" , 30:"CDLCLOSINGMARUBOZU" , 31:"CDLCONCEALBABYSWALL" , 32:"CDLCOUNTERATTACK" , 33:"CDLDARKCLOUDCOVER" , 34:"CDLDOJI" , 35:"CDLDOJISTAR" , 36:"CDLDRAGONFLYDOJI" , 37:"CDLENGULFING" , 38:"CDLEVENINGDOJISTAR" , 39:"CDLEVENINGSTAR" , 40:"CDLGAPSIDESIDEWHITE" , 41:"CDLGRAVESTONEDOJI" , 42:"CDLHAMMER" , 43:"CDLHANGINGMAN" , 44:"CDLHARAMI" , 45:"CDLHARAMICROSS" , 46:"CDLHIGHWAVE" , 47:"CDLHIKKAKE" , 48:"CDLHIKKAKEMOD" , 49:"CDLHOMINGPIGEON" , 50:"CDLIDENTICAL3CROWS" , 51:"CDLINNECK" , 52:"CDLINVERTEDHAMMER" , 53:"CDLKICKING" , 54:"CDLKICKINGBYLENGTH" , 55:"CDLLADDERBOTTOM" , 56:"CDLLONGLEGGEDDOJI" , 57:"CDLLONGLINE" , 58:"CDLMARUBOZU" , 59:"CDLMATCHINGLOW" , 60:"CDLMATHOLD" , 61:"CDLMORNINGDOJISTAR" , 62:"CDLMORNINGSTAR" , 63:"CDLONNECK" , 64:"CDLPIERCING" , 65:"CDLRICKSHAWMAN" , 66:"CDLRISEFALL3METHODS" , 67:"CDLSEPARATINGLINES" , 68:"CDLSHOOTINGSTAR" , 69:"CDLSHORTLINE" , 70:"CDLSPINNINGTOP" , 71:"CDLSTALLEDPATTERN" , 72:"CDLSTICKSANDWICH" , 73:"CDLTAKURI" , 74:"CDLTASUKIGAP" , 75:"CDLTHRUSTING" , 76:"CDLTRISTAR" , 77:"CDLUNIQUE3RIVER" , 78:"CDLUPSIDEGAP2CROWS" , 79:"CDLXSIDEGAP3METHODS"}
-	df = utils.get_data(mydb, sql, name_dict)
+	SQL = "SELECT * FROM unlabelled_record"
+	table_rows = utils.extract_data(sql,MYDB)
+	NAME_DICT = {0:"index", 1:"date_of_day" , 2:"hour" , 3:"name" , 4:"volume" , 5:"numberOfTrades" , 6:"var_ema" , 7:"var_bollinger" , 8:"var_stoch" , 9:"rsi_indicator" , 10:"stoch_indicator" , 11:"RSI" , 12:"ema_indicator" , 13:"bollinger_indicator" , 14:"fft_20_close" , 15:"fft_100_close" , 16:"fft_100_open" , 17:"fft_100_low" , 18:"fft_100_high", 19:"CDL2CROWS" , 20:"CDL3BLACKCROWS" , 21:"CDL3INSIDE" , 22:"CDL3LINESTRIKE" , 23:"CDL3OUTSIDE" , 24:"CDL3STARSINSOUTH" , 25:"CDL3WHITESOLDIERS" , 26:"CDLABANDONEDBABY" , 27:"CDLADVANCEBLOCK" , 28:"CDLBELTHOLD" , 29:"CDLBREAKAWAY" , 30:"CDLCLOSINGMARUBOZU" , 31:"CDLCONCEALBABYSWALL" , 32:"CDLCOUNTERATTACK" , 33:"CDLDARKCLOUDCOVER" , 34:"CDLDOJI" , 35:"CDLDOJISTAR" , 36:"CDLDRAGONFLYDOJI" , 37:"CDLENGULFING" , 38:"CDLEVENINGDOJISTAR" , 39:"CDLEVENINGSTAR" , 40:"CDLGAPSIDESIDEWHITE" , 41:"CDLGRAVESTONEDOJI" , 42:"CDLHAMMER" , 43:"CDLHANGINGMAN" , 44:"CDLHARAMI" , 45:"CDLHARAMICROSS" , 46:"CDLHIGHWAVE" , 47:"CDLHIKKAKE" , 48:"CDLHIKKAKEMOD" , 49:"CDLHOMINGPIGEON" , 50:"CDLIDENTICAL3CROWS" , 51:"CDLINNECK" , 52:"CDLINVERTEDHAMMER" , 53:"CDLKICKING" , 54:"CDLKICKINGBYLENGTH" , 55:"CDLLADDERBOTTOM" , 56:"CDLLONGLEGGEDDOJI" , 57:"CDLLONGLINE" , 58:"CDLMARUBOZU" , 59:"CDLMATCHINGLOW" , 60:"CDLMATHOLD" , 61:"CDLMORNINGDOJISTAR" , 62:"CDLMORNINGSTAR" , 63:"CDLONNECK" , 64:"CDLPIERCING" , 65:"CDLRICKSHAWMAN" , 66:"CDLRISEFALL3METHODS" , 67:"CDLSEPARATINGLINES" , 68:"CDLSHOOTINGSTAR" , 69:"CDLSHORTLINE" , 70:"CDLSPINNINGTOP" , 71:"CDLSTALLEDPATTERN" , 72:"CDLSTICKSANDWICH" , 73:"CDLTAKURI" , 74:"CDLTASUKIGAP" , 75:"CDLTHRUSTING" , 76:"CDLTRISTAR" , 77:"CDLUNIQUE3RIVER" , 78:"CDLUPSIDEGAP2CROWS" , 79:"CDLXSIDEGAP3METHODS"}
+	df = utils.get_data(MYDB, SQL, NAME_DICT)
 
 	index = df.index.values.tolist()
 	date_of_day = df.date_of_day.values.tolist()
@@ -126,10 +126,10 @@ if __name__ == "__main__":
 	label = [0]*len(table_rows)
 	utils.labelling_data(label,min_index_list,max_index_list)
 
-	sql = "INSERT INTO master_record_staging (date_of_day, hour, name, volume, numberOfTrades,var_ema, var_bollinger, var_stoch, rsi_indicator,stoch_indicator, RSI, ema_indicator, bollinger_indicator,fft_20_close, fft_100_close, fft_100_open, fft_100_low,fft_100_high, CDL2CROWS, CDL3BLACKCROWS, CDL3INSIDE,CDL3LINESTRIKE, CDL3OUTSIDE, CDL3STARSINSOUTH,CDL3WHITESOLDIERS, CDLABANDONEDBABY, CDLADVANCEBLOCK,CDLBELTHOLD, CDLBREAKAWAY, CDLCLOSINGMARUBOZU,CDLCONCEALBABYSWALL, CDLCOUNTERATTACK, CDLDARKCLOUDCOVER,CDLDOJI, CDLDOJISTAR, CDLDRAGONFLYDOJI, CDLENGULFING,CDLEVENINGDOJISTAR, CDLEVENINGSTAR, CDLGAPSIDESIDEWHITE,CDLGRAVESTONEDOJI, CDLHAMMER, CDLHANGINGMAN, CDLHARAMI,CDLHARAMICROSS, CDLHIGHWAVE, CDLHIKKAKE, CDLHIKKAKEMOD,CDLHOMINGPIGEON, CDLIDENTICAL3CROWS, CDLINNECK,CDLINVERTEDHAMMER, CDLKICKING, CDLKICKINGBYLENGTH,CDLLADDERBOTTOM, CDLLONGLEGGEDDOJI, CDLLONGLINE, CDLMARUBOZU,CDLMATCHINGLOW, CDLMATHOLD, CDLMORNINGDOJISTAR, CDLMORNINGSTAR,CDLONNECK, CDLPIERCING, CDLRICKSHAWMAN, CDLRISEFALL3METHODS,CDLSEPARATINGLINES, CDLSHOOTINGSTAR, CDLSHORTLINE,CDLSPINNINGTOP, CDLSTALLEDPATTERN, CDLSTICKSANDWICH, CDLTAKURI,CDLTASUKIGAP, CDLTHRUSTING, CDLTRISTAR, CDLUNIQUE3RIVER,CDLUPSIDEGAP2CROWS, CDLXSIDEGAP3METHODS, label) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+	SQL = "INSERT INTO master_record_staging (date_of_day, hour, name, volume, numberOfTrades,var_ema, var_bollinger, var_stoch, rsi_indicator,stoch_indicator, RSI, ema_indicator, bollinger_indicator,fft_20_close, fft_100_close, fft_100_open, fft_100_low,fft_100_high, CDL2CROWS, CDL3BLACKCROWS, CDL3INSIDE,CDL3LINESTRIKE, CDL3OUTSIDE, CDL3STARSINSOUTH,CDL3WHITESOLDIERS, CDLABANDONEDBABY, CDLADVANCEBLOCK,CDLBELTHOLD, CDLBREAKAWAY, CDLCLOSINGMARUBOZU,CDLCONCEALBABYSWALL, CDLCOUNTERATTACK, CDLDARKCLOUDCOVER,CDLDOJI, CDLDOJISTAR, CDLDRAGONFLYDOJI, CDLENGULFING,CDLEVENINGDOJISTAR, CDLEVENINGSTAR, CDLGAPSIDESIDEWHITE,CDLGRAVESTONEDOJI, CDLHAMMER, CDLHANGINGMAN, CDLHARAMI,CDLHARAMICROSS, CDLHIGHWAVE, CDLHIKKAKE, CDLHIKKAKEMOD,CDLHOMINGPIGEON, CDLIDENTICAL3CROWS, CDLINNECK,CDLINVERTEDHAMMER, CDLKICKING, CDLKICKINGBYLENGTH,CDLLADDERBOTTOM, CDLLONGLEGGEDDOJI, CDLLONGLINE, CDLMARUBOZU,CDLMATCHINGLOW, CDLMATHOLD, CDLMORNINGDOJISTAR, CDLMORNINGSTAR,CDLONNECK, CDLPIERCING, CDLRICKSHAWMAN, CDLRISEFALL3METHODS,CDLSEPARATINGLINES, CDLSHOOTINGSTAR, CDLSHORTLINE,CDLSPINNINGTOP, CDLSTALLEDPATTERN, CDLSTICKSANDWICH, CDLTAKURI,CDLTASUKIGAP, CDLTHRUSTING, CDLTRISTAR, CDLUNIQUE3RIVER,CDLUPSIDEGAP2CROWS, CDLXSIDEGAP3METHODS, label) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 	i = 0
 	while i < len(index):
 		print(str(i)+'/'+str(len(index)))
 		val = (date_of_day[i], hour[i], name[i], volume[i], numberOfTrades[i], var_ema[i], var_bollinger[i], var_stoch[i], rsi_indicator[i], stoch_indicator[i], RSI[i], ema_indicator[i], bollinger_indicator[i],fft_20_close[i],fft_100_close[i],fft_100_open[i],fft_100_low[i],fft_100_high[i] ,CDL2CROWS[i], CDL3BLACKCROWS[i], CDL3INSIDE[i], CDL3LINESTRIKE[i], CDL3OUTSIDE[i], CDL3STARSINSOUTH[i], CDL3WHITESOLDIERS[i], CDLABANDONEDBABY[i], CDLADVANCEBLOCK[i], CDLBELTHOLD[i], CDLBREAKAWAY[i], CDLCLOSINGMARUBOZU[i], CDLCONCEALBABYSWALL[i], CDLCOUNTERATTACK[i], CDLDARKCLOUDCOVER[i], CDLDOJI[i], CDLDOJISTAR[i], CDLDRAGONFLYDOJI[i], CDLENGULFING[i], CDLEVENINGDOJISTAR[i], CDLEVENINGSTAR[i], CDLGAPSIDESIDEWHITE[i], CDLGRAVESTONEDOJI[i], CDLHAMMER[i], CDLHANGINGMAN[i], CDLHARAMI[i], CDLHARAMICROSS[i], CDLHIGHWAVE[i], CDLHIKKAKE[i], CDLHIKKAKEMOD[i], CDLHOMINGPIGEON[i], CDLIDENTICAL3CROWS[i], CDLINNECK[i], CDLINVERTEDHAMMER[i], CDLKICKING[i], CDLKICKINGBYLENGTH[i], CDLLADDERBOTTOM[i], CDLLONGLEGGEDDOJI[i], CDLLONGLINE[i], CDLMARUBOZU[i], CDLMATCHINGLOW[i], CDLMATHOLD[i], CDLMORNINGDOJISTAR[i], CDLMORNINGSTAR[i], CDLONNECK[i], CDLPIERCING[i], CDLRICKSHAWMAN[i], CDLRISEFALL3METHODS[i], CDLSEPARATINGLINES[i], CDLSHOOTINGSTAR[i], CDLSHORTLINE[i], CDLSPINNINGTOP[i], CDLSTALLEDPATTERN[i], CDLSTICKSANDWICH[i], CDLTAKURI[i], CDLTASUKIGAP[i], CDLTHRUSTING[i], CDLTRISTAR[i], CDLUNIQUE3RIVER[i], CDLUPSIDEGAP2CROWS[i], CDLXSIDEGAP3METHODS[i], label[i])
-		utils.insert_multiple_into_db(mydb, sql,val)
+		utils.insert_multiple_into_db(MYDB, SQL,val)
 		i += 1
