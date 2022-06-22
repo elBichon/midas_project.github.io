@@ -9,7 +9,7 @@ importlib-resources==1.5.0
 mpl-finance==0.10.1
 mplfinance==0.12.3a3
 mysql-connector-python==8.0.20
-numpy==1.17.0
+numpy==1.22.0
 pandas==0.18.1
 plotly==4.6.0
 PyMySQL==0.9.3
